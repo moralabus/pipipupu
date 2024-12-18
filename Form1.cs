@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,14 +13,15 @@ namespace Курсач
         private List<Airplane> airplanes = new List<Airplane>();
         private OpenFileDialog openFileDialog1 = new OpenFileDialog();
         private SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-        public Form1()
+            public Form1()
         {
             InitializeComponent();
             airline = new Airline();
             buttonAddAirplaneWithFoto.Click += buttonAddAirplaneWithFoto_Click;
             buttonSort.Click += buttonSortByFuelConsumption_Click_1;
             this.BackColor = Airplane.BackColor;
+            radioButtonPassenger.CheckedChanged += RadioButton_CheckedChanged;
+            radioButtonCargo.CheckedChanged += RadioButton_CheckedChanged;
 
             // Настройка OpenFileDialog
             openFileDialog1.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
@@ -45,6 +46,12 @@ namespace Курсач
             }
         }
 
+        private void RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            bool пассажирскийВыбран = radioButtonPassenger.Checked;
+            numericUpDownPassengerCapacity.Visible = пассажирскийВыбран;
+            numericUpDownCargoCapacity.Visible = !пассажирскийВыбран;
+        }
 
 
         private void buttonSortByRange_Click(object sender, EventArgs e)
@@ -83,6 +90,7 @@ namespace Курсач
             DateTime manufactureDate = dateTimePickerManufactureDate.Value;
             string foto = openFileDialog1.FileName;
 
+
             // Проверка имени: если начинается с маленькой буквы, меняем на большую
             if (!string.IsNullOrEmpty(airplaneName) && char.IsLower(airplaneName[0]))
             {
@@ -95,12 +103,39 @@ namespace Курсач
                 return;
             }
 
-            Airplane newAirplane = new Airplane(airplaneName, model, range, fuelConsumption, manufactureDate, foto);
+           
+
+            //  Определяем тип самолета
+            string selectedType = radioButtonPassenger.Checked ? "PassengerPlane" : (radioButtonCargo.Checked ? "CargoPlane" : "");
+
+
+            if (string.IsNullOrEmpty(selectedType))
+            {
+                MessageBox.Show("Выберите тип самолёта!");
+                return;
+            }
+
+
+            Airplane newAirplane;
+            if (selectedType == "PassengerPlane")
+            {
+                int passengerCapacity = (int)numericUpDownPassengerCapacity.Value;  // поле вместимости пассажиров
+                newAirplane = new PassengerPlane(airplaneName, model, range, fuelConsumption, manufactureDate, foto, passengerCapacity);
+            }
+            else // if (selectedType == "CargoPlane")
+            {
+                decimal cargoCapacity = numericUpDownCargoCapacity.Value;  // поле грузоподъёмности
+                newAirplane = new CargoPlane(airplaneName, model, range, fuelConsumption, manufactureDate, foto, cargoCapacity);
+            }
+
+
             airplanes.Add(newAirplane);
             UpdateListBox();
             ClearForm();
             newAirplane.ShowFoto(pictureBoxFoto);
-        }
+        
+
+    }
 
         private void ClearForm()
         {
@@ -129,9 +164,9 @@ namespace Курсач
             foreach (var airplane in airplanes)
             {
                 string airplaneInfo = string.Format("Имя: {0}, Модель: {1}, Дальность: {2} км, Расход: {3} л/100 км, Возраст: {4} лет",
-                  airplane.Name, airplane.Model, airplane.Range, airplane.FuelConsumption, airplane.GetAge());
+                  airplane.Name, airplane.Model, airplane.Range, airplane.FuelConsumption, airplane.GetAge()), newAirplane;
 
-                listBoxAirplanes.Items.Add(airplaneInfo);
+                listBoxAirplanes.Items.Add(airplane.ToString());
             }
         }
 
@@ -287,6 +322,7 @@ namespace Курсач
             }
         }
 
+
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -318,6 +354,30 @@ namespace Курсач
         }
 
         private void groupBox5_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonGetAirplaneByIndex_Click(object sender, EventArgs e)
+        {
+            if (listBoxAirplanes.SelectedIndex != -1)
+            {
+                int index = listBoxAirplanes.SelectedIndex;
+                textBoxOutput.Text = $"Индекс выбранного самолета: {index}";
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите самолет из списка.");
+            }
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }
