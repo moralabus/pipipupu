@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -14,6 +14,8 @@ namespace Курсач
         public decimal FuelConsumption { get; set; }
         public DateTime ManufactureDate { get; set; }
         public string Foto { get; set; }
+
+ 
 
         public static Color BackColor
         {
