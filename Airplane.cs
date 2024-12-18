@@ -6,34 +6,23 @@ using System.Windows.Forms;
 
 namespace Курсач
 {
-    public class Airplane
+    public class Airplane : Aircraft, IFlightOperations, IFuelOperations
     {
-        public string Name { get; set; }
-        public string Model { get; set; }
-        public int Range { get; set; }
-        public decimal FuelConsumption { get; set; }
-        public DateTime ManufactureDate { get; set; }
         public string Foto { get; set; }
+        public Engine Engine { get; set; } // Композиция
 
- 
-
-        public static Color BackColor
+        public Airplane(string name, string model, int range, decimal fuelConsumption, DateTime manufactureDate, string foto, Engine engine)
+            : base(name, model, range, fuelConsumption, manufactureDate)
         {
-            get
-            {
-                int currentDay = DateTime.Now.DayOfWeek.GetHashCode();
-                return (currentDay % 2 == 1) ? Color.LightPink : Color.LightBlue;
-            }
+            Foto = foto;
+            Engine = engine ?? throw new ArgumentNullException(nameof(engine), "Engine cannot be null");
         }
 
-        public Airplane(string name, string model, int range, decimal fuelConsumption, DateTime manufactureDate, string foto)
+        public override string GetAircraftType() => "Самолет";
+
+        public override string AircraftInfo()
         {
-            Name = name;
-            Model = model;
-            Range = range;
-            FuelConsumption = fuelConsumption;
-            ManufactureDate = manufactureDate;
-            Foto = foto;
+            return base.AircraftInfo() + $", Двигатель: [{Engine}]";
         }
 
         public void ShowFoto(PictureBox pictureBox)
@@ -57,59 +46,34 @@ namespace Курсач
             }
         }
 
+        public static Color BackColor
+        {
+            get
+            {
+                int currentDay = DateTime.Now.DayOfWeek.GetHashCode();
+                return (currentDay % 2 == 1) ? Color.LightPink : Color.LightBlue;
+            }
+        }
+
+        public void Refuel(decimal fuelAmount)
+        {
+            OnRefueled(Name, fuelAmount); // Вызываем защищенный метод
+        }
         public int GetAge()
         {
-            return DateTime.Now.Year - ManufactureDate.Year;
+            return DateTime.Now.Year - ManufactureDate.Year; // Реализация IFlightOperations
         }
-
-        public override string ToString()
-        {
-            return $"Самолет: {Name}, Модель: {Model}, Дальность полета: {Range} км, Потребление горючего: {FuelConsumption} л/100км, Дата производства: {ManufactureDate.ToShortDateString()}";
-        }
-
-        // Метод для записи данных о самолетах в текстовый файл
         public static void WriteToFile(List<Airplane> airplanes, string filePath)
         {
             using (StreamWriter writer = new StreamWriter(filePath))
             {
-                foreach (Airplane airplane in airplanes)
+                foreach (var airplane in airplanes)
                 {
-                    // Запись данных самолета в файл, разделенных запятыми
-                    writer.WriteLine($"{airplane.Name},{airplane.Model},{airplane.Range},{airplane.FuelConsumption},{airplane.ManufactureDate.ToShortDateString()},{airplane.Foto}");
+                    writer.WriteLine($"{airplane.Name},{airplane.Model},{airplane.Range},{airplane.FuelConsumption},{airplane.ManufactureDate},{airplane.Foto}");
                 }
             }
         }
-        
-        public void NameText(TextBox textBox)
-        {
-        using (FontDialog fontDialog = new FontDialog())
-        {
-            // Показываем диалоговое окно для выбора шрифта
-            if (fontDialog.ShowDialog() == DialogResult.OK)
-            {
-                textBox.Font = fontDialog.Font;
-            }
-        }
 
-        using (ColorDialog colorDialog = new ColorDialog())
-        {
-            // Показываем диалоговое окно для выбора цвета
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                textBox.ForeColor = colorDialog.Color;
-            }
-        }
-    }
-
-        public event Action<string, decimal> Refueled;
-
-        public void Refuel(decimal fuelAmount)
-        {
-            Refueled?.Invoke(Name, fuelAmount); // Уведомляем подписчиков
-        }
-
-
-        // Метод для чтения данных о самолетах из текстового файла
         public static List<Airplane> ReadFromFile(string filePath)
         {
             List<Airplane> airplanes = new List<Airplane>();
@@ -118,16 +82,12 @@ namespace Курсач
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string[] parts = line.Split(',');
-                    if (parts.Length == 6)
+                    var parts = line.Split(',');
+                    if (parts.Length >= 6)
                     {
                         airplanes.Add(new Airplane(
-                            parts[0].Trim(),  // Удаление пробелов
-                            parts[1].Trim(),
-                            int.Parse(parts[2]),
-                            decimal.Parse(parts[3]),
-                            DateTime.Parse(parts[4]),
-                            parts[5].Trim()));
+                            parts[0], parts[1], int.Parse(parts[2]), decimal.Parse(parts[3]),
+                            DateTime.Parse(parts[4]), parts[5], new Engine("Default", 1000)));
                     }
                 }
             }
