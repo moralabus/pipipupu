@@ -1,4 +1,4 @@
-﻿namespace Курсач {  
+namespace Курсач {  
     partial class Form1
     {
         /// <summary>
@@ -54,12 +54,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttonGetAirplaneByIndex = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.buttonSetNameStyle = new System.Windows.Forms.Button();
             this.numericUpDownFuelAmount = new System.Windows.Forms.NumericUpDown();
             this.buttonRefuel = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.radioButtonPassenger = new System.Windows.Forms.RadioButton();
+            this.numericUpDownPassengerCapacity = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownCargoCapacity = new System.Windows.Forms.NumericUpDown();
+            this.radioButtonCargo = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFoto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFuelConsumption)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRange)).BeginInit();
@@ -72,6 +77,8 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFuelAmount)).BeginInit();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPassengerCapacity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCargoCapacity)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonSelectFoto
@@ -323,6 +330,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.buttonGetAirplaneByIndex);
             this.groupBox3.Controls.Add(this.textBoxOutput);
             this.groupBox3.Controls.Add(this.buttonShowAirplaneInfo);
             this.groupBox3.Location = new System.Drawing.Point(974, 378);
@@ -331,6 +339,16 @@
             this.groupBox3.TabIndex = 71;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "найти информацию о выбранном самолете";
+            // 
+            // buttonGetAirplaneByIndex
+            // 
+            this.buttonGetAirplaneByIndex.Location = new System.Drawing.Point(165, 25);
+            this.buttonGetAirplaneByIndex.Name = "buttonGetAirplaneByIndex";
+            this.buttonGetAirplaneByIndex.Size = new System.Drawing.Size(92, 36);
+            this.buttonGetAirplaneByIndex.TabIndex = 81;
+            this.buttonGetAirplaneByIndex.Text = "индекс самолета";
+            this.buttonGetAirplaneByIndex.UseVisualStyleBackColor = true;
+            this.buttonGetAirplaneByIndex.Click += new System.EventHandler(this.buttonGetAirplaneByIndex_Click);
             // 
             // groupBox4
             // 
@@ -395,11 +413,52 @@
             this.label5.TabIndex = 75;
             this.label5.Text = "литры";
             // 
+            // radioButtonPassenger
+            // 
+            this.radioButtonPassenger.AutoSize = true;
+            this.radioButtonPassenger.Location = new System.Drawing.Point(1013, 134);
+            this.radioButtonPassenger.Name = "radioButtonPassenger";
+            this.radioButtonPassenger.Size = new System.Drawing.Size(186, 29);
+            this.radioButtonPassenger.TabIndex = 75;
+            this.radioButtonPassenger.TabStop = true;
+            this.radioButtonPassenger.Text = "пассажирский";
+            this.radioButtonPassenger.UseVisualStyleBackColor = true;
+            this.radioButtonPassenger.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // numericUpDownPassengerCapacity
+            // 
+            this.numericUpDownPassengerCapacity.Location = new System.Drawing.Point(1013, 177);
+            this.numericUpDownPassengerCapacity.Name = "numericUpDownPassengerCapacity";
+            this.numericUpDownPassengerCapacity.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownPassengerCapacity.TabIndex = 78;
+            // 
+            // numericUpDownCargoCapacity
+            // 
+            this.numericUpDownCargoCapacity.Location = new System.Drawing.Point(1013, 269);
+            this.numericUpDownCargoCapacity.Name = "numericUpDownCargoCapacity";
+            this.numericUpDownCargoCapacity.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownCargoCapacity.TabIndex = 80;
+            // 
+            // radioButtonCargo
+            // 
+            this.radioButtonCargo.AutoSize = true;
+            this.radioButtonCargo.Location = new System.Drawing.Point(1013, 226);
+            this.radioButtonCargo.Name = "radioButtonCargo";
+            this.radioButtonCargo.Size = new System.Drawing.Size(132, 29);
+            this.radioButtonCargo.TabIndex = 79;
+            this.radioButtonCargo.TabStop = true;
+            this.radioButtonCargo.Text = "грузовой";
+            this.radioButtonCargo.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1497, 1132);
+            this.Controls.Add(this.numericUpDownCargoCapacity);
+            this.Controls.Add(this.radioButtonCargo);
+            this.Controls.Add(this.numericUpDownPassengerCapacity);
+            this.Controls.Add(this.radioButtonPassenger);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -426,6 +485,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFuelAmount)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPassengerCapacity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCargoCapacity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -466,6 +527,11 @@
         private System.Windows.Forms.Button buttonRefuel;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton radioButtonPassenger;
+        private System.Windows.Forms.NumericUpDown numericUpDownPassengerCapacity;
+        private System.Windows.Forms.NumericUpDown numericUpDownCargoCapacity;
+        private System.Windows.Forms.RadioButton radioButtonCargo;
+        private System.Windows.Forms.Button buttonGetAirplaneByIndex;
     }
 }
 
