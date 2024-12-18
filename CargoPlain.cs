@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Курсач;
 
 public class CargoPlane : Airplane
@@ -18,3 +18,5 @@ public class CargoPlane : Airplane
         return base.ToString() + $", Грузоподъемность: {CargoCapacity} тонн";
     }
 }
+
+
