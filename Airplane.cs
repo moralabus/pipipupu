@@ -9,6 +9,7 @@ namespace Курсач
 {
     public class Airplane : Aircraft, IFuelOperations
     {
+        public override string Name { get => $"Airplane {base.Name}"; set => base.Name = value; }
         public string Foto { get; set; }
         public Engine Engine { get; set; }
 
@@ -21,11 +22,13 @@ namespace Курсач
 
         public override string GetAircraftType() => "Самолет";
 
+        // Метод добавляет информацию о двигателе к строке с информацией о самолете.
         public override string AircraftInfo()
         {
             return base.AircraftInfo() + $", Двигатель: [{Engine}]";
         }
 
+        // Метод отображает изображение самолета в указанном PictureBox.
         public void ShowFoto(PictureBox pictureBox)
         {
             if (!string.IsNullOrEmpty(Foto))
@@ -47,15 +50,7 @@ namespace Курсач
             }
         }
 
-        public static Color BackColor
-        {
-            get
-            {
-                int currentDay = DateTime.Now.DayOfWeek.GetHashCode();
-                return (currentDay % 2 == 1) ? Color.LightPink : Color.LightBlue;
-            }
-        }
-
+        // Метод для дозаправки самолета 
         public void Refuel(decimal fuelAmount)
         {
             OnRefueled(Name, fuelAmount);
@@ -71,7 +66,7 @@ namespace Курсач
             }
         }
 
-        // Перегруженный метод WriteToFile 
+        // Перегруженный метод WriteToFile  записи в файл 
         public static void WriteToFile(List<Airplane> airplanes, string filePath, bool append)
         {
             using (StreamWriter writer = new StreamWriter(filePath, append))
@@ -83,7 +78,7 @@ namespace Курсач
             }
         }
 
-        // Перегруженный метод ReadFromFile
+        // Перегруженный метод ReadFromFile чтения информации из файла 
         public static List<Airplane> ReadFromFile(string filePath)
         {
             List<Airplane> airplanes = new List<Airplane>();
